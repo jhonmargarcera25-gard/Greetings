@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 18th Birthday!</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        rosegold: {
+                            50: '#fff5f7',
+                            100: '#ffe8ec',
+                            200: '#fecdd6',
+                            300: '#fba2b3',
+                            400: '#f76f8a',
+                            500: '#ee4366',
+                            600: '#da264c',
+                            700: '#b8193a',
+                            800: '#991834',
+                            900: '#801830',
+                        },
+                        champagne: '#F7E7CE',
+                        blush: '#FFF0F5',
+                        goldaccent: '#D4AF37'
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Poppins', 'sans-serif'],
+                        cursive: ['Alex Brush', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 240, 245, 0.55)), url('ganda.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #4A3B40;
+            overflow-x: hidden;
+        }
+
+        .font-cursive {
+            font-family: 'Alex Brush', cursive;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 30px rgba(224, 150, 169, 0.2);
+        }
+
+        .glass-gold {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 240, 245, 0.9) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15);
+        }
+
+        .rosegold-gradient-text {
+            background: linear-gradient(135deg, #da264c 0%, #f76f8a 50%, #b8193a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Live Animated Blue Gradient Text for Name */
+        .live-blue-text {
+            background: linear-gradient(135deg, #2563eb 0%, #38bdf8 50%, #1d4ed8 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: liveShine 4s linear infinite;
+            filter: drop-shadow(0 2px 8px rgba(37, 99, 235, 0.35));
+        }
+
+        @keyframes liveShine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Falling Blue Petals Animation Styles */
+        .petals-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 20;
+            overflow: hidden;
+        }
+
+        .petal {
+            position: absolute;
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 50%, #76b5c5 100%);
+            border-radius: 150% 0 150% 0;
+            animation: fall linear infinite;
+            opacity: 0.75;
+            box-shadow: 0 0 10px rgba(118, 181, 197, 0.3);
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) translateX(0) rotate(0deg);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(50vh) translateX(50px) rotate(180deg);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(105vh) translateX(-50px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .wish-card {
+            perspective: 1000px;
+            height: 220px;
+        }
+        .wish-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .wish-card.flipped .wish-card-inner {
+            transform: rotateY(180deg);
+        }
+        .wish-card-front, .wish-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+        }
+        .wish-card-back {
+            transform: rotateY(180deg);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FFF0F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #fba2b3;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen selection:bg-rosegold-200 selection:text-rosegold-900">
+
+    <!-- Falling Petals Container -->
+    <div class="petals-container" id="petalsContainer"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 w-full z-40 glass-card bg-opacity-90 px-4 py-3 transition-all duration-300">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <a href="#" class="font-serif text-xl sm:text-2xl font-bold rosegold-gradient-text">
+                ✨ Debutante @ Ningay
+            </a>
+            <div class="hidden md:flex space-x-6 text-sm font-medium text-gray-700">
+                <a href="#gallery" class="hover:text-rosegold-500 transition">Gallery</a>
+                <a href="#wishes" class="hover:text-rosegold-500 transition">18 Wishes</a>
+                <a href="#letter" class="hover:text-rosegold-500 transition">Message</a>
+                <a href="#guestbook" class="hover:text-rosegold-500 transition">Guestbook</a>
+            </div>
+            <button onclick="triggerConfetti()" class="px-4 py-2 text-xs sm:text-sm bg-gradient-to-r from-rosegold-400 to-rosegold-500 hover:from-rosegold-500 hover:to-rosegold-600 text-white rounded-full shadow-md transition flex items-center space-x-2">
+                <i class="fa-solid fa-wand-magic-sparkles text-amber-200"></i>
+                <span>Pop Confetti!</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Header Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-4 z-10">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-block px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-md text-rosegold-700 text-xs sm:text-sm font-semibold tracking-widest uppercase mb-4 shadow-sm border border-rosegold-200 animate-pulse">
+                🌸 Chapter 18 Begins
+            </div>
+            
+            <h1 class="font-serif text-4xl sm:text-6xl md:text-7xl font-bold text-gray-900 leading-tight mb-3 drop-shadow-sm">
+                Happy 18th Birthday, <br/>
+                <span class="font-cursive text-6xl sm:text-8xl md:text-9xl live-blue-text block mt-2 font-normal">
+                    Ma. Celenia Garais
+                </span>
+            </h1>
+            
+            <p class="text-gray-800 text-base sm:text-lg max-w-2xl mx-auto font-medium leading-relaxed mb-8 drop-shadow-sm">
+                Welcome to adulthood! Today is October 21st, and we celebrate your grace, beauty, kindness, and all the magical moments that brought you to this wonderful milestone.
+            </p>
+
+            <div class="flex justify-center items-center space-x-4 mb-10">
+                <div class="glass-gold px-6 py-4 rounded-2xl text-center min-w-[90px]">
+                    <span class="block font-serif text-2xl sm:text-3xl font-bold text-rosegold-700">18</span>
+                    <span class="text-xs text-gray-700 uppercase tracking-wider font-semibold">Years of Joy</span>
+                </div>
+                <div class="text-rosegold-600 text-xl font-serif">✦</div>
+                <div class="glass-gold px-6 py-4 rounded-2xl text-center min-w-[90px]">
+                    <span class="block font-serif text-2xl sm:text-3xl font-bold text-rosegold-700">216</span>
+                    <span class="text-xs text-gray-700 uppercase tracking-wider font-semibold">Months</span>
+                </div>
+                <div class="text-rosegold-600 text-xl font-serif">✦</div>
+                <div class="glass-gold px-6 py-4 rounded-2xl text-center min-w-[90px]">
+                    <span class="block font-serif text-2xl sm:text-3xl font-bold text-rosegold-700">6,574</span>
+                    <span class="text-xs text-gray-700 uppercase tracking-wider font-semibold">Days Loved</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <a href="#letter" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-rosegold-500 via-rosegold-400 to-amber-400 text-white font-medium rounded-full shadow-lg transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-envelope-open-text"></i>
+                    <span>Read Birthday Message</span>
+                </a>
+                <a href="#gallery" class="w-full sm:w-auto px-8 py-3.5 bg-white/90 text-rosegold-600 font-medium rounded-full border border-rosegold-200 shadow-md transition flex items-center justify-center space-x-2">
+                    <i class="fa-regular fa-images"></i>
+                    <span>View Ningay's Gallery</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery Section -->
+    <section id="gallery" class="py-20 px-4 max-w-6xl mx-auto relative z-10">
+        <div class="text-center mb-12">
+            <span class="text-xs uppercase tracking-widest text-rosegold-700 font-bold bg-white/70 px-3 py-1 rounded-full shadow-sm">Capturing Beautiful Moments</span>
+            <h2 class="font-serif text-3xl sm:text-5xl font-bold text-gray-900 mt-2">Ningay's Gallery</h2>
+            <div class="w-24 h-1 bg-gradient-to-r from-rosegold-300 via-rosegold-500 to-amber-300 mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="group glass-card rounded-2xl overflow-hidden p-3 transition duration-500 hover:-translate-y-2 hover:shadow-2xl">
+                <div class="relative overflow-hidden rounded-xl h-72 cursor-pointer" onclick="openLightbox(this.querySelector('img').src, 'Radiant & Elegant')">
+                    <img src="image1.jpg" alt="Debutante Photo 1" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-out">
+                </div>
+                <div class="p-3 text-center">
+                    <h3 class="font-serif font-semibold text-gray-800 text-lg">Radiant & Elegant</h3>
+                    <p class="text-xs text-gray-500">Face Card</p>
+                </div>
+            </div>
+
+            <div class="group glass-card rounded-2xl overflow-hidden p-3 transition duration-500 hover:-translate-y-2 hover:shadow-2xl">
+                <div class="relative overflow-hidden rounded-xl h-72 cursor-pointer" onclick="openLightbox(this.querySelector('img').src, 'Full of Sunshine')">
+                    <img src="image2.jpg" alt="Debutante Photo 2" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-out">
+                </div>
+                <div class="p-3 text-center">
+                    <h3 class="font-serif font-semibold text-gray-800 text-lg">Full of Sunshine</h3>
+                    <p class="text-xs text-gray-500">Face Card</p>
+                </div>
+            </div>
+
+            <div class="group glass-card rounded-2xl overflow-hidden p-3 transition duration-500 hover:-translate-y-2 hover:shadow-2xl">
+                <div class="relative overflow-hidden rounded-xl h-72 cursor-pointer" onclick="openLightbox(this.querySelector('img').src, 'Charming Smiles')">
+                    <img src="image3.jpg" alt="Debutante Photo 3" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-out">
+                </div>
+                <div class="p-3 text-center">
+                    <h3 class="font-serif font-semibold text-gray-800 text-lg">Charming Smiles</h3>
+                    <p class="text-xs text-gray-500">Face Card</p>
+                </div>
+            </div>
+
+            <div class="group glass-card rounded-2xl overflow-hidden p-3 transition duration-500 hover:-translate-y-2 hover:shadow-2xl">
+                <div class="relative overflow-hidden rounded-xl h-72 cursor-pointer" onclick="openLightbox(this.querySelector('img').src, 'Pure Elegance')">
+                    <img src="image4.jpg" alt="Debutante Photo 4" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-out">
+                </div>
+                <div class="p-3 text-center">
+                    <h3 class="font-serif font-semibold text-gray-800 text-lg">Pure Elegance</h3>
+                    <p class="text-xs text-gray-500">Face Card</p>
+                </div>
+            </div>
+
+            <div class="group glass-card rounded-2xl overflow-hidden p-3 transition duration-500 hover:-translate-y-2 hover:shadow-2xl">
+                <div class="relative overflow-hidden rounded-xl h-72 cursor-pointer" onclick="openLightbox(this.querySelector('img').src, 'Laughter & Joy')">
+                    <img src="image5.jpg" alt="Debutante Photo 5" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-out">
+                </div>
+                <div class="p-3 text-center">
+                    <h3 class="font-serif font-semibold text-gray-800 text-lg">Laughter & Joy</h3>
+                    <p class="text-xs text-gray-500">Face Card</p>
+                </div>
+            </div>
+
+            <div class="group glass-card rounded-2xl overflow-hidden p-3 transition duration-500 hover:-translate-y-2 hover:shadow-2xl">
+                <div class="relative overflow-hidden rounded-xl h-72 cursor-pointer" onclick="openLightbox(this.querySelector('img').src, 'Bright Future')">
+                    <img src="image6.jpg" alt="Debutante Photo 6" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-out">
+                </div>
+                <div class="p-3 text-center">
+                    <h3 class="font-serif font-semibold text-gray-800 text-lg">Bright Future</h3>
+                    <p class="text-xs text-gray-500">Memory Card</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 18 Wishes Interactive Section -->
+    <section id="wishes" class="py-20 px-4 relative z-10">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-xs uppercase tracking-widest text-rosegold-700 font-bold bg-white/70 px-3 py-1 rounded-full shadow-sm">18 Wishes for the Debutante</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold text-gray-900 mt-2">18 Wishes & Treasures 🌹</h2>
+                <p class="text-gray-700 text-sm mt-2 font-medium">Click on each rose card to reveal a special birthday wish!</p>
+                <div class="w-24 h-1 bg-gradient-to-r from-rosegold-300 via-rosegold-500 to-amber-300 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4" id="wishesGrid"></div>
+        </div>
+    </section>
+
+    <!-- Birthday Letter Message Section -->
+    <section id="letter" class="py-20 px-4 max-w-4xl mx-auto relative z-10">
+        <div class="text-center mb-10">
+            <span class="text-xs uppercase tracking-widest text-rosegold-700 font-bold bg-white/70 px-3 py-1 rounded-full shadow-sm">From the Heart</span>
+            <h2 class="font-serif text-3xl sm:text-5xl font-bold text-gray-900 mt-2">Special Birthday Message 💌</h2>
+            <div class="w-24 h-1 bg-gradient-to-r from-rosegold-300 via-rosegold-500 to-amber-300 mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <div class="glass-gold rounded-3xl p-6 sm:p-10 shadow-2xl border border-rosegold-200 relative">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-12 h-12 rounded-full bg-rosegold-100 border border-rosegold-300 flex items-center justify-center text-rosegold-700 font-serif font-bold text-xl">
+                    18
+                </div>
+                <div>
+                    <h3 class="font-serif text-xl sm:text-2xl font-bold text-gray-900">Dearest Princess Ma. Celenia</h3>
+                    <p class="text-xs text-rosegold-700 font-semibold">Happy 18th Birthday (from; jm) </p>
+                </div>
+            </div>
+
+            <div class="prose max-w-none text-gray-800 font-light text-base sm:text-lg leading-relaxed space-y-4">
+                <p>
+                    Happy 18th Birthday! 🎉 Swerte ng mundo na may isang tulad mo na nagbibigay ng saya, liwanag, at inspirasyon sa lahat ng tao sa paligid mo. Today marks the official start of your grand adventure into adulthood!
+                </p>
+                <p>
+                    Sana ngayong 18 ka na, mas lalo mo pang matupad ang lahat ng pangarap mo. Never stop chasing what makes your heart happy. Always remember how loved, appreciated, and special you are!
+                </p>
+                <p class="italic font-serif text-rosegold-900 bg-white/80 p-4 rounded-xl border-l-4 border-rosegold-500 shadow-sm">
+                    "May your 18th year be filled with endless opportunities, sweet surprises, genuine laughter, and unconditional love. Keep shining!"
+                </p>
+                <p>
+                    Enjoy every single moment of your debut and this wonderful new chapter. Happy 18th Birthday! 💖🥂✨
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guestbook Section -->
+    <section id="guestbook" class="py-20 px-4 max-w-5xl mx-auto relative z-10">
+        <div class="text-center mb-12">
+            <span class="text-xs uppercase tracking-widest text-rosegold-700 font-bold bg-white/70 px-3 py-1 rounded-full shadow-sm">Share Your Greetings</span>
+            <h2 class="font-serif text-3xl sm:text-5xl font-bold text-gray-900 mt-2">Guestbook & Wishes Wall 📝</h2>
+            <p class="text-gray-700 text-sm mt-2 font-medium">Leave your sweet messages below!</p>
+            <div class="w-24 h-1 bg-gradient-to-r from-rosegold-300 via-rosegold-500 to-amber-300 mx-auto mt-4 rounded-full"></div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-5 glass-card rounded-2xl p-6 shadow-xl">
+                <h3 class="font-serif font-semibold text-xl text-gray-900 mb-4 flex items-center space-x-2">
+                    <i class="fa-solid fa-pen-nib text-rosegold-600"></i>
+                    <span>Write a Wish</span>
+                </h3>
+                <form id="wishForm" onsubmit="addWish(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-1">Your Name</label>
+                        <input type="text" id="guestName" required placeholder="e.g. Tita Grace / Friend" 
+                               class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:border-rosegold-500 focus:ring-2 focus:ring-rosegold-200 outline-none text-sm bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-1">Relation / Role</label>
+                        <input type="text" id="guestRole" placeholder="e.g. Best Friend, Cousin" 
+                               class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:border-rosegold-500 focus:ring-2 focus:ring-rosegold-200 outline-none text-sm bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-700 mb-1">Your Birthday Greeting</label>
+                        <textarea id="guestMessage" rows="4" required placeholder="Write your message here..." 
+                                  class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:border-rosegold-500 focus:ring-2 focus:ring-rosegold-200 outline-none text-sm resize-none bg-white"></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-3 bg-gradient-to-r from-rosegold-500 to-rosegold-600 text-white font-medium rounded-xl shadow-md transition flex justify-center items-center space-x-2">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Post Birthday Message</span>
+                    </button>
+                </form>
+            </div>
+
+            <div class="lg:col-span-7 space-y-4 max-h-[500px] overflow-y-auto pr-2" id="wishesList"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-10 text-center text-gray-700 text-sm border-t border-rosegold-200 bg-white/80 relative z-10 font-medium">
+        <p class="font-serif text-base font-bold text-rosegold-800">Happy 18th Birthday Celebration ✨</p>
+        <p class="mt-1 text-xs">Made with love for Ma. Celenia's Debut 🎉</p>
+    </footer>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm" onclick="closeLightbox()">
+        <div class="relative max-w-3xl w-full bg-white rounded-2xl overflow-hidden shadow-2xl p-2" onclick="event.stopPropagation()">
+            <button onclick="closeLightbox()" class="absolute top-4 right-4 z-10 w-10 h-10 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <img id="lightboxImg" src="" alt="Preview" class="w-full max-h-[75vh] object-contain rounded-xl">
+            <div class="p-4 text-center">
+                <h4 id="lightboxCaption" class="font-serif font-semibold text-lg text-gray-800">Photo Preview</h4>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate Falling Blue Petals
+        function createPetals() {
+            const container = document.getElementById('petalsContainer');
+            const petalCount = 18;
+
+            for (let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                
+                const size = Math.random() * 10 + 10;
+                petal.style.width = `${size}px`;
+                petal.style.height = `${size * 1.4}px`;
+                petal.style.left = `${Math.random() * 100}vw`;
+                
+                const duration = Math.random() * 6 + 6;
+                const delay = Math.random() * 5;
+                petal.style.animationDuration = `${duration}s`;
+                petal.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(petal);
+            }
+        }
+
+        const wishesData = [
+            "1. Unlimited happiness and laughter in life!",
+            "2. Good health and boundless energy always.",
+            "3. Success in all your studies and future career.",
+            "4. True and everlasting friendships.",
+            "5. Courage to chase all your big dreams.",
+            "6. More exciting travels and adventures!",
+            "7. Financial wisdom and prosperity.",
+            "8. Peace of mind and emotional strength.",
+            "9. Unwavering love from family and friends.",
+            "10. Wisdom in every life choice you make.",
+            "11. Unforgettable fun moments as a young adult.",
+            "12. Confidence to be uniquely yourself.",
+            "13. Overflowing blessings every single day.",
+            "14. Inspiration to touch other people's lives.",
+            "15. Strength to overcome any challenge.",
+            "16. Safety and protection wherever you go.",
+            "17. Genuine inner joy and satisfaction.",
+            "18. A magical 18th birthday year ahead!"
+        ];
+
+        function render18Wishes() {
+            const grid = document.getElementById('wishesGrid');
+            grid.innerHTML = '';
+            wishesData.forEach((wish, index) => {
+                const card = document.createElement('div');
+                card.className = 'wish-card';
+                card.innerHTML = `
+                    <div class="wish-card-inner" onclick="flipCard(this)">
+                        <div class="wish-card-front glass-card p-4 flex flex-col justify-center items-center text-center border border-rosegold-200 hover:border-rosegold-400 transition">
+                            <div class="w-10 h-10 rounded-full bg-rosegold-100 text-rosegold-700 flex items-center justify-center mb-2 font-serif font-bold text-sm">
+                                🌹 ${index + 1}
+                            </div>
+                            <span class="text-xs font-bold text-gray-700 uppercase tracking-wider">Wish #${index + 1}</span>
+                            <span class="text-[10px] text-rosegold-600 font-medium mt-1">Tap to flip ✨</span>
+                        </div>
+                        <div class="wish-card-back glass-gold p-4 flex flex-col justify-center items-center text-center border border-amber-300 shadow-md">
+                            <i class="fa-solid fa-crown text-amber-500 text-xs mb-1"></i>
+                            <p class="text-xs text-gray-900 font-semibold leading-relaxed">${wish}</p>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function flipCard(element) {
+            element.parentElement.classList.toggle('flipped');
+            if(typeof confetti === 'function') confetti({ particleCount: 20, spread: 40, origin: { y: 0.7 } });
+        }
+
+        function getWishes() {
+            const stored = localStorage.getItem('debutante_wishes');
+            if (stored) {
+                try {
+                    return JSON.parse(stored);
+                } catch(e) {
+                    return [];
+                }
+            }
+            return [];
+        }
+
+        function renderGuestbook() {
+            const wishes = getWishes();
+            const list = document.getElementById('wishesList');
+            list.innerHTML = '';
+            
+            if (wishes.length === 0) {
+                list.innerHTML = `
+                    <div class="glass-card p-8 rounded-2xl text-center text-gray-500 border border-rosegold-100">
+                        <i class="fa-regular fa-comment-dots text-3xl text-rosegold-400 mb-2"></i>
+                        <p class="text-sm font-medium">Wala pang message sa guestbook. Ikaw ang una mag-iwan ng wish para kay Ma. Celenia! ✨</p>
+                    </div>
+                `;
+                return;
+            }
+
+            wishes.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'glass-card p-4 rounded-2xl shadow-sm border border-rosegold-100';
+                div.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h4 class="font-serif font-bold text-gray-900 text-sm">${item.name}</h4>
+                            <span class="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-rosegold-100 text-rosegold-800 font-bold">${item.role || 'Guest'}</span>
+                        </div>
+                        <i class="fa-solid fa-heart text-rosegold-500 text-xs"></i>
+                    </div>
+                    <p class="text-gray-800 text-xs font-medium leading-relaxed">${item.msg}</p>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function addWish(event) {
+            event.preventDefault();
+            const name = document.getElementById('guestName').value;
+            const role = document.getElementById('guestRole').value;
+            const msg = document.getElementById('guestMessage').value;
+            const wishes = getWishes();
+            wishes.unshift({ name, role, msg });
+            localStorage.setItem('debutante_wishes', JSON.stringify(wishes));
+            renderGuestbook();
+            document.getElementById('wishForm').reset();
+            if(typeof confetti === 'function') confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+        }
+
+        function openLightbox(src, caption) {
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightboxCaption').textContent = caption;
+            document.getElementById('lightbox').classList.remove('hidden');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.add('hidden');
+        }
+
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            }
+        }
+
+        window.onload = function() {
+            // Nililinis ang lumang data kung sakaling may naiwan sa browser storage
+            const stored = localStorage.getItem('debutante_wishes');
+            if (stored && (stored.includes('Tita Grace') || stored.includes('Jim Cuttie') || stored.includes('ingay'))) {
+                localStorage.removeItem('debutante_wishes');
+            }
+            
+            createPetals();
+            render18Wishes();
+            renderGuestbook();
+        };
+    </script>
+</body>
+</html>
